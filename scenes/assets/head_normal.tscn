@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://4uoj5ad36imb"]
+
+[ext_resource type="PackedScene" uid="uid://dg4mawhivq5lv" path="res://models/exports/head_normal.glb" id="1_mrbkn"]
+
+[node name="head_normal" instance=ExtResource("1_mrbkn")]

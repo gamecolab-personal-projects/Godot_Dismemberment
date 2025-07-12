@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://dh4udgva01m50"]
+
+[ext_resource type="PackedScene" uid="uid://cjjep6knogigo" path="res://models/exports/head_gibbed.glb" id="1_wdn10"]
+
+[node name="head_gibbed" instance=ExtResource("1_wdn10")]
