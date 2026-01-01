@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://cg82yeqpmihdp"]
+
+[ext_resource type="ArrayMesh" uid="uid://byst7yrt0grra" path="res://models/dummy/meshes/Personaje_desm_Sphere.res" id="1_f6wj5"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_mjcd3"]
+radius = 1.035
+
+[node name="Cabeza_suelta" type="RigidBody3D"]
+mass = 5.0
+linear_damp = 0.5
+angular_damp = 5.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.006248474, -5.5204597, 0)
+mesh = ExtResource("1_f6wj5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.96533614, 0.26101, 0, -0.26101, 0.96533614, 0, 0, 0, 1, 0.020871162, 0.99348444, 0)
+shape = SubResource("SphereShape3D_mjcd3")

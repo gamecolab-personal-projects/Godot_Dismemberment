@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://21cbsjtctt06"]
+
+[ext_resource type="ArrayMesh" uid="uid://brulj4x3i1b26" path="res://models/dummy/meshes/Personaje_desm_Cylinder_004.res" id="1_5ooji"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_o8bo6"]
+height = 2.0893555
+radius = 0.2993164
+
+[node name="Brazo_suelto_der" type="RigidBody3D"]
+mass = 2.5
+linear_damp = 2.0
+angular_damp = 5.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0712242, -5.066687, 0)
+mesh = ExtResource("1_5ooji")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.96533614, 0.26101, 0, -0.26101, 0.96533614, 0, 0, 0, 1, -0.14582062, -0.8123448, 0)
+shape = SubResource("CylinderShape3D_o8bo6")
