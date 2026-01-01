@@ -1,0 +1,99 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://45fp0m1vwryq"
+path="res://.godot/imported/Personaje_desm.glb-190dcdabe1295a90417f13ce4c4d5c13.scn"
+
+[deps]
+
+source_file="res://models/dummy/Personaje_desm.glb"
+dest_files=["res://.godot/imported/Personaje_desm.glb-190dcdabe1295a90417f13ce4c4d5c13.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
+_subresources={
+"meshes": {
+"Personaje_desm_Cylinder": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://models/dummy/meshes/Personaje_desm_Cylinder.res",
+"save_to_file/path": "uid://bbs0w38dmsirm"
+},
+"Personaje_desm_Cylinder_001": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://models/dummy/meshes/Personaje_desm_Cylinder_001.res",
+"save_to_file/path": "uid://cjdc672h14qeb"
+},
+"Personaje_desm_Cylinder_002": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://models/dummy/meshes/Personaje_desm_Cylinder_002.res",
+"save_to_file/path": "uid://c5wk3ux5do0p2"
+},
+"Personaje_desm_Cylinder_003": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://models/dummy/meshes/Personaje_desm_Cylinder_003.res",
+"save_to_file/path": "uid://dq8aj8sct2nsx"
+},
+"Personaje_desm_Cylinder_004": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://models/dummy/meshes/Personaje_desm_Cylinder_004.res",
+"save_to_file/path": "uid://brulj4x3i1b26"
+},
+"Personaje_desm_Sphere": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://models/dummy/meshes/Personaje_desm_Sphere.res",
+"save_to_file/path": "uid://byst7yrt0grra"
+}
+}
+}
+gltf/naming_version=2
+gltf/embedded_image_handling=1

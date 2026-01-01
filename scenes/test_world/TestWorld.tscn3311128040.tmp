@@ -1,0 +1,45 @@
+[gd_scene load_steps=8 format=3 uid="uid://co4jeg8r5anfc"]
+
+[ext_resource type="Script" uid="uid://b665m2letn05e" path="res://scenes/test_world/camera_3d.gd" id="1_6aauk"]
+[ext_resource type="PackedScene" uid="uid://cfk15nghto2fi" path="res://scenes/dummy_character/personaje_desm.tscn" id="1_mv7wm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_6aauk"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_mej68"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6aauk"]
+
+[sub_resource type="Sky" id="Sky_mej68"]
+sky_material = SubResource("ProceduralSkyMaterial_6aauk")
+
+[sub_resource type="Environment" id="Environment_6aauk"]
+background_mode = 2
+background_energy_multiplier = 1.45
+sky = SubResource("Sky_mej68")
+ambient_light_color = Color(0.32245046, 0.42786676, 0.616321, 1)
+
+[node name="TestWorld" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4171753, 11.230835)
+script = ExtResource("1_6aauk")
+
+[node name="RayCast3D" type="RayCast3D" parent="Camera3D"]
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="Personaje_desm" parent="." instance=ExtResource("1_mv7wm")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 20, 0, -0.4737079, 0)
+mesh = SubResource("BoxMesh_6aauk")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_mej68")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_6aauk")
