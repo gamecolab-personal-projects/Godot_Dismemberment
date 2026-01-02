@@ -69,7 +69,6 @@ func generar_ragdoll_estable():
 	# 1. PREPARACIÓN
 	if has_node("CollisionShape3D"):
 		$CollisionShape3D.disabled = true
-	
 	if has_node("AnimationPlayer"):
 		$AnimationPlayer.stop()
 
@@ -80,55 +79,77 @@ func generar_ragdoll_estable():
 
 	# 3. GENERACIÓN
 	for i in skeleton.get_bone_count():
-		var nombre_hueso = skeleton.get_bone_name(i)
+		var nombre_hueso = skeleton.get_bone_name(i).to_lower()
+		
+		# Ignorar huesos pequeños que causan ruido visual
+		if "toe" in nombre_hueso or "finger" in nombre_hueso or "end" in nombre_hueso:
+			continue
+
 		var pb = PhysicalBone3D.new()
-		pb.bone_name = nombre_hueso
-		pb.name = "Ragdoll_" + nombre_hueso
-		skeleton.add_child(pb)
+		pb.bone_name = skeleton.get_bone_name(i)
+		pb.name = "Ragdoll_" + pb.bone_name
+		skeleton.add_child(pb, true)
 		
-		# IMPORTANTE: Capas para evitar que los huesos se empujen entre sí
 		pb.collision_layer = 4
-		pb.collision_mask = 1 # Solo choca con el suelo (Capa 1)
-		
-		# Sincronizar posición inicial
+		pb.collision_mask = 1 
+		pb.can_sleep = true
 		pb.global_transform = skeleton.global_transform * skeleton.get_bone_global_pose(i)
 		
 		var shape_node = CollisionShape3D.new()
 		var capsule = CapsuleShape3D.new()
 		
-		# Cápsulas finas para que las articulaciones tengan "espacio" para doblarse
-		if "torso" in nombre_hueso.to_lower() or "hips" in nombre_hueso.to_lower():
-			capsule.radius = 0.1
-			capsule.height = 0.35
-			pb.mass = 15.0 # Peso muerto para que caiga rápido
+		if "torso" in nombre_hueso or "hips" in nombre_hueso:
+			capsule.radius = 0.11
+			capsule.height = 0.4
+			pb.mass = 25.0 
 		else:
-			capsule.radius = 0.04
-			capsule.height = 0.2
-			pb.mass = 1.0
+			capsule.radius = 0.05
+			capsule.height = 0.28
+			pb.mass = 2.0 
 			
 		shape_node.shape = capsule
 		pb.add_child(shape_node)
 		
-		# 4. ARTICULACIÓN PIN (Simple y sin errores)
+		# 4. ARTICULACIÓN PIN CON LÍMITE ANATÓMICO "SIMULADO"
 		if skeleton.get_bone_parent(i) != -1:
 			pb.joint_type = PhysicalBone3D.JOINT_TYPE_PIN
+			
+			# Ajustamos BIAS y SOFTNESS para endurecer el giro.
+			# Al bajar Softness a 0.2, el hueso se resiste mucho a girar lejos de su eje.
+			pb.set("joint_constraints/bias", 0.5)     # Fuerza de retorno más rápida
+			pb.set("joint_constraints/softness", 0.1) # Muy bajo para que actúe como "tope"
+			pb.set("joint_constraints/relaxation", 1.0)
 		
-		# Ajustes de fricción para evitar que parezca gelatina
-		pb.linear_damp = 0.5
-		pb.angular_damp = 3.0 # Un poco de resistencia al giro para que no vibre
+		# 5. CONTROL DE ROTACIÓN (Aquí limitamos los giros locos)
+		pb.linear_damp = 0.6
+		# Subimos el angular_damp a 15 de base para que el giro se sienta "pesado"
+		# y no alcance velocidades que permitan dar la vuelta completa fácilmente.
+		pb.angular_damp = 15.0 
 
-	# 5. INICIO DE SIMULACIÓN E IMPULSO
+	# 6. INICIO E IMPULSO
 	skeleton.physical_bones_start_simulation()
 	
-	# Empujón para asegurar que no caiga de pie
-	var cadera = skeleton.get_node_or_null("Ragdoll_Hips") 
+	var cadera = null
+	for child in skeleton.get_children():
+		if child is PhysicalBone3D and ("hips" in child.name.to_lower() or "root" in child.name.to_lower()):
+			cadera = child
+			break
+			
 	if cadera:
-		cadera.apply_central_impulse(Vector3(0, -2.0, -1.0))
+		# Impulso más seco para que el cuerpo caiga rápido antes de poder girar sobre sí mismo
+		cadera.apply_central_impulse(Vector3(randf_range(-1, 1), -4.5, -1.0))
 
-	# 6. AUTO-STOP
-	get_tree().create_timer(7.0).timeout.connect(func():
+	# 7. CIERRE PROGRESIVO
+	get_tree().create_timer(3.5).timeout.connect(func():
 		if is_instance_valid(skeleton):
-			skeleton.physical_bones_stop_simulation()
+			for pb in skeleton.get_children():
+				if pb is PhysicalBone3D:
+					pb.angular_damp = 60.0 
+					pb.linear_damp = 20.0
+			
+			await get_tree().create_timer(1.0).timeout
+			if is_instance_valid(skeleton):
+				skeleton.physical_bones_stop_simulation()
 	)
 
 func morir():
