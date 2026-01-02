@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cfk15nghto2fi"]
+[gd_scene load_steps=7 format=3 uid="uid://cfk15nghto2fi"]
 
 [ext_resource type="PackedScene" uid="uid://45fp0m1vwryq" path="res://models/dummy/Personaje_desm.glb" id="1_m36ne"]
 [ext_resource type="Script" uid="uid://dxt0cdtuoe88m" path="res://scenes/dummy_character/personaje_desm.gd" id="2_2761s"]
+[ext_resource type="PackedScene" uid="uid://drjvdhvu7vnay" path="res://scenes/particulas_sangre.tscn" id="3_gbrlt"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m36ne"]
 radius = 0.30859375
@@ -16,6 +17,7 @@ radius = 1.0
 
 [node name="Personaje_desm" instance=ExtResource("1_m36ne")]
 script = ExtResource("2_2761s")
+escena_sangre_chorro = ExtResource("3_gbrlt")
 
 [node name="attach_brazo_izq" type="BoneAttachment3D" parent="Armature/Skeleton3D" index="6"]
 transform = Transform3D(-0.96026033, 0.27910224, 1.4802944e-06, -0.27910194, -0.96026134, 1.5597314e-07, 1.4650002e-06, -2.633785e-07, 1, 0.8578953, 5.166234, 7.4832553e-07)

@@ -1,5 +1,7 @@
 extends Node3D
 
+# Exporta la escena de partículas de sangre (chorro)
+@export var escena_sangre_chorro: PackedScene
 # Diccionario de configuración:
 # "NombreDelArea": [Nodo_Malla, Escena_RigidBody, Nodo_Attachment]
 @onready var piezas = {
@@ -23,45 +25,72 @@ extends Node3D
 var esta_muerto = false
 
 func recibir_dano_en_pieza(nombre_area: String):
-	# Si la pieza no está en el diccionario, ignoramos
-	if not piezas.has(nombre_area):
-		print("El área ", nombre_area, " no está configurada en el diccionario.")
-		return
+	if not piezas.has(nombre_area): return
 	
 	var datos = piezas[nombre_area]
 	var malla = datos[0]
 	var escena_suelta = datos[1]
 	var attachment = datos[2]
 	
-	# Si la malla ya no está (ya se desmembró), no hacemos nada
-	if not malla.visible:
-		return
+	if not malla.visible: return
 	
-	# 1. Escondemos la parte del cuerpo original
 	malla.hide()
 	
-	# 2. Si es la cabeza, ejecutamos la lógica de muerte
 	if nombre_area == "AreaCabeza":
 		morir()
 	
-	# 3. Soltamos el trozo físico (RigidBody)
-	var trozo = escena_suelta.instantiate()
-	
-	# PRIMERO: Añadir al mundo
-	get_parent().add_child(trozo)
-	
-	# SEGUNDO: Posición del hombro (attachment)
-	trozo.global_position = attachment.global_position
+	# --- LLAMADA A LA FUNCIÓN DE PARTÍCULAS ---
+	generar_chorro_sangre(attachment)
+	# ------------------------------------------
 
-	# TERCERO: Rotación del cuerpo (para que no salga vertical)
+	# Soltamos el trozo físico (Tu lógica original)
+	var trozo = escena_suelta.instantiate()
+	get_parent().add_child(trozo)
+	trozo.global_position = attachment.global_position
 	trozo.global_rotation = self.global_rotation
 	
-	# 4. Impulso físico para que no caiga como un bloque
 	if trozo is RigidBody3D:
 		var fuerza_explosion = 3.0
 		var direccion = Vector3(randf_range(-1,1), randf_range(0.5,1), randf_range(-1,1)).normalized()
 		trozo.apply_central_impulse(direccion * fuerza_explosion)
-		trozo.apply_torque_impulse(Vector3(randf(), randf(), randf()) * 2.0)
+
+# --- FUNCIÓN DE PARTÍCULAS INDEPENDIENTE ---
+func generar_chorro_sangre(nodo_anclaje: Node3D):
+	if not escena_sangre_chorro:
+		return
+
+	var sangre = escena_sangre_chorro.instantiate() as GPUParticles3D
+	nodo_anclaje.add_child(sangre)
+	
+	# 1. Definimos el "Punto Origen" (Centro del torso a la altura del corte)
+	var torso_pos_global = self.global_position
+	torso_pos_global.y = nodo_anclaje.global_position.y
+	
+	# 2. Calculamos la dirección real TORSO -> EXTREMIDAD
+	# Restamos Destino - Origen para que el vector apunte hacia afuera
+	var direccion_hacia_afuera = (nodo_anclaje.global_position - torso_pos_global).normalized()
+	
+	# 3. Ajuste de posición (el "lerp" para meterlo en el cilindro)
+	# Convertimos el punto del torso a local del attachment para saber hacia dónde retraer
+	var objetivo_local = nodo_anclaje.to_local(torso_pos_global)
+	var factor_retraccion = 0.3
+	sangre.position = Vector3.ZERO.lerp(objetivo_local, factor_retraccion)
+	
+	# 4. ORIENTACIÓN FINAL (Look At)
+	# Forzamos que el chorro mire hacia la dirección calculada en el paso 2
+	# Usamos global_position de la sangre para que el rayo de mirada sea paralelo al vector
+	if direccion_hacia_afuera.length() > 0.01:
+		sangre.look_at(sangre.global_position + direccion_hacia_afuera, Vector3.UP)
+	
+	# 5. Activar partículas
+	sangre.emitting = true
+	
+	# Limpieza automática
+	get_tree().create_timer(sangre.lifetime + 1.0).timeout.connect(func():
+		if is_instance_valid(sangre):
+			sangre.queue_free()
+	)
+
 
 func generar_ragdoll_estable():
 	var skeleton = $Armature/Skeleton3D
