@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://yfch1uluh0sk"]
-
-[ext_resource type="PackedScene" uid="uid://bca1ovqjik7v3" path="res://models/fullBodyHeadGibbed/gib02.glb" id="1_puxga"]
-
-[node name="Gib" type="Node3D"]
-
-[node name="gib022" parent="." instance=ExtResource("1_puxga")]

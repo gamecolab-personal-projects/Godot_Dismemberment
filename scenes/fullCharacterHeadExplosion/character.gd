@@ -3,23 +3,25 @@ extends CharacterBody3D
 @onready var head_intact = $fullBodyHeadGibbed/cabeza_intacta
 @onready var head_gibbed = $fullBodyHeadGibbed/cabeza_gibbed_01
 @onready var blood = $ParticulasSangre
-@onready var blood_explosion = $ParticulasSangreExplosion   # <-- Nuevo sistema de explosión
+@onready var blood_explosion = $ParticulasSangreExplosion
 @onready var head_origin = $fullBodyHeadGibbed/cabeza_intacta/HeadOrigin
 
-@export var gib_scene: PackedScene
+# Nueva lista de gibs: agrega tantas variantes como quieras en el editor
+@export var gib_scenes: Array[PackedScene] = []
+
 @export var gib_count := 6
 
-# Parámetros que puedes tocar
+# Parámetros de impulso
 @export_range(0.1, 20) var gib_force_min := 3.0
 @export_range(0.1, 20) var gib_force_max := 7.0
-@export_range(0, 90) var gib_angle_deg := 60 # ángulo máximo respecto de la vertical (0 = hacia arriba, 90 = horizontal)
+@export_range(0, 90) var gib_angle_deg := 60 # ángulo máximo respecto de la vertical
 
 var exploded := false
 
 func _ready():
 	head_gibbed.visible = false
 	blood.emitting = false
-	blood_explosion.emitting = false   # <-- Inicialmente apagado
+	blood_explosion.emitting = false
 
 func _input(event):
 	if event.is_action_pressed("ui_accept"):
@@ -33,7 +35,7 @@ func swap_head():
 	head_intact.visible = false
 	head_gibbed.visible = true
 
-	# Chorro lineal actual
+	# Chorro lineal
 	blood.restart()
 	blood.emitting = true
 
@@ -41,15 +43,20 @@ func swap_head():
 	blood_explosion.restart()
 	blood_explosion.emitting = true
 
-	# Spawn de gibs
+	# Spawn gibs
 	spawn_gibs()
 
 func spawn_gibs():
+	if gib_scenes.is_empty():
+		push_error("No hay variantes de gibs en gib_scenes")
+		return
+
 	for i in gib_count:
+		# Elegir una variante aleatoria
+		var gib_scene = gib_scenes[randi() % gib_scenes.size()]
 		var gib = gib_scene.instantiate()
 		get_tree().current_scene.add_child(gib)
 
-		# Asegurarse de que sea RigidBody3D
 		var rb := gib as RigidBody3D
 
 		# Posición inicial cerca de la cabeza
@@ -78,4 +85,11 @@ func spawn_gibs():
 			randf_range(-10, 10),
 			randf_range(-10, 10),
 			randf_range(-10, 10)
+		)
+
+		# Escala aleatoria
+		rb.scale = Vector3(
+			randf_range(0.8, 1.2),
+			randf_range(0.8, 1.2),
+			randf_range(0.8, 1.2)
 		)
