@@ -1,12 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://ciivs4ehmc11w"]
+[gd_scene load_steps=8 format=3 uid="uid://ciivs4ehmc11w"]
 
 [ext_resource type="Script" uid="uid://c4ipr0pxa1sa2" path="res://scenes/fullCharacterHeadExplosion/character.gd" id="1_6cnqi"]
+[ext_resource type="PackedScene" uid="uid://34atkq3oh42r" path="res://scenes/fullCharacterHeadExplosion/gib03.tscn" id="2_22ew4"]
 [ext_resource type="PackedScene" uid="uid://bpn73nai3mgvk" path="res://models/fullBodyHeadGibbed/fullBodyHeadGibbed.glb" id="2_k8juq"]
 [ext_resource type="PackedScene" uid="uid://drjvdhvu7vnay" path="res://scenes/particulas_sangre.tscn" id="3_k8juq"]
 
 [sub_resource type="Curve" id="Curve_x2wk7"]
 _limits = [0.0, 5.0, 0.0, 1.0]
-_data = [Vector2(0.0033783838, 2.1389275), 0.0, 0.0, 0, 0, Vector2(0.5439189, 1.244842), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 3.5694637), 0.0, 0.0, 0, 0, Vector2(0.4425676, 2.3177445), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="CurveTexture" id="CurveTexture_p4cm6"]
@@ -17,22 +18,34 @@ particle_flag_align_y = true
 angle_min = -69.49999
 angle_max = 69.500015
 direction = Vector3(0, 1, 0)
-spread = 20.0
+spread = 180.0
 initial_velocity_min = 1.0
 initial_velocity_max = 5.0
-gravity = Vector3(0, -30, 0)
 scale_min = 0.0
 scale_curve = SubResource("CurveTexture_p4cm6")
 
 [node name="Character" type="CharacterBody3D"]
 script = ExtResource("1_6cnqi")
+gib_scene = ExtResource("2_22ew4")
 
 [node name="fullBodyHeadGibbed" parent="." instance=ExtResource("2_k8juq")]
 
+[node name="HeadOrigin" type="Marker3D" parent="fullBodyHeadGibbed/cabeza_intacta" index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.691109, 0)
+
 [node name="ParticulasSangre" parent="." instance=ExtResource("3_k8juq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4797974, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.635871, 0)
 amount = 2000
 lifetime = 4.0
+process_material = SubResource("ParticleProcessMaterial_k8juq")
+
+[node name="ParticulasSangreExplosion" parent="." instance=ExtResource("3_k8juq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6231494, 0)
+amount = 300
+lifetime = 0.3
+preprocess = 0.05
+speed_scale = 0.5
+explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_k8juq")
 
 [editable path="fullBodyHeadGibbed"]

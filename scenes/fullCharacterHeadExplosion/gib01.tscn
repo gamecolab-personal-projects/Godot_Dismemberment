@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://pjul1f3p35uh"]
+
+[ext_resource type="PackedScene" uid="uid://13tiiihf3ewl" path="res://models/fullBodyHeadGibbed/gib01.glb" id="1_81tjv"]
+
+[node name="Gib" type="Node3D"]
+transform = Transform3D(0.08, 0, 0, 0, 0.08, 0, 0, 0, 0.08, 0, 0, 0)
+
+[node name="gib012" parent="." instance=ExtResource("1_81tjv")]
