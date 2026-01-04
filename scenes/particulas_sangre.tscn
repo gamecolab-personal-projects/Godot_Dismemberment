@@ -19,7 +19,6 @@ scale_min = 0.0
 scale_curve = SubResource("CurveTexture_p4cm6")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p4t7a"]
-transparency = 1
 albedo_color = Color(0.6172312, 0.031172795, 0.18993333, 1)
 billboard_mode = 1
 billboard_keep_scale = true
