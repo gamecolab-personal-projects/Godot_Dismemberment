@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://co4jeg8r5anfc"]
+[gd_scene load_steps=10 format=3 uid="uid://co4jeg8r5anfc"]
 
 [ext_resource type="Script" uid="uid://b665m2letn05e" path="res://scenes/test_world/camera_3d.gd" id="1_6aauk"]
 [ext_resource type="PackedScene" uid="uid://cfk15nghto2fi" path="res://scenes/dummy_character/personaje_desm.tscn" id="1_mv7wm"]
 [ext_resource type="Script" uid="uid://tcmps8xstxn2" path="res://scenes/test_world/game_manager.gd" id="3_mej68"]
+[ext_resource type="PackedScene" uid="uid://ciivs4ehmc11w" path="res://scenes/fullCharacterHeadExplosion/character.tscn" id="4_adqdi"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_6aauk"]
 
@@ -23,7 +24,7 @@ ambient_light_color = Color(0.32245046, 0.42786676, 0.616321, 1)
 [node name="TestWorld" type="Node3D"]
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4171753, 11.230835)
+transform = Transform3D(1, 0, 0, 0, 0.9432807, 0.3319965, 0, -0.3319965, 0.9432807, 0, 9.146851, 7.7977295)
 script = ExtResource("1_6aauk")
 
 [node name="RayCast3D" type="RayCast3D" parent="Camera3D"]
@@ -32,6 +33,7 @@ collision_mask = 3
 collide_with_areas = true
 
 [node name="Personaje_desm" parent="." instance=ExtResource("1_mv7wm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.087982, 0, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 20, 0, -0.4737079, 0)
@@ -48,3 +50,6 @@ environment = SubResource("Environment_6aauk")
 
 [node name="GameManager" type="Node3D" parent="."]
 script = ExtResource("3_mej68")
+
+[node name="Character" parent="." instance=ExtResource("4_adqdi")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
